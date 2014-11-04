@@ -161,6 +161,14 @@ backend java_servers_ssl
 frontend http-in
   bind :80
   
+  acl odata path_end -i /odata
+
+  use_backend srvs_odata if odata
+
+  backend srvs_odata
+   balance roundrobin 
+   server host1 54.68.21.102:80 
+  
   # all domains of Rails applications
   <% node[:haproxy][:rails_applications].each do |app_name, app_config| -%>
     <% app_config['domains'].each do |domain| -%>
@@ -319,13 +327,4 @@ frontend https-in
   default_backend java_servers_ssl
   <% end -%>
   
-  frontend http
-  acl odata path_end -i /odata
-
-  use_backend srvs_odata    if odata
-
-  backend srvs_odata
-   balance roundrobin 
-   server host1 awseb-e-v-awsebloa-1eev6j6tdobfh-380368556.us-west-2.elb.amazonaws.com 
-
 <% end -%>  
