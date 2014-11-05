@@ -165,7 +165,7 @@ backend coverya_api
 frontend http-in
   bind :80
   
-  acl api_mapping path_end -i /odata
+  acl api_mapping path_beg -i /odata
 
   use_backend coverya_api if api_mapping
 
