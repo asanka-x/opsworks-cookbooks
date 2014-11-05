@@ -158,16 +158,22 @@ backend java_servers_ssl
   <% end -%>
 <% end -%>
 
-backend coverya_api
+backend coverya_production_api
   balance roundrobin 
-  server api1 awseb-e-v-AWSEBLoa-1EEV6J6TDOBFH-380368556.us-west-2.elb.amazonaws.com 
+  server api1 awseb-e-v-AWSEBLoa-1EEV6J6TDOBFH-380368556.us-west-2.elb.amazonaws.com
+
+backend coverya_staging_api
+  balance roundrobin 
+  server api1 coverya-staging.elasticbeanstalk.com 
 
 frontend http-in
   bind :80
   
-  acl api_mapping path_beg -i /odata
+  acl production_api_mapping path_beg -i /api
+  acl staging_api_mapping path_beg -i /staging-api
 
-  use_backend coverya_api if api_mapping
+  use_backend coverya_production_api if production_api_mapping
+  use_backend coverya_staging_api if staging_api_mapping
 
   
   
