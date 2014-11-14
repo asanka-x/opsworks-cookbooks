@@ -169,6 +169,8 @@ backend coverya_staging_api
 frontend http-in
   bind :80
   
+  respidel ^WWW-Authenticate:.*
+  
   acl production_api_mapping path_beg -i /api
   acl staging_api_mapping path_beg -i /staging-api
 
